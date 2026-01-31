@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MADARSA KANZ UL IMAN | Official Website</title>
+    <meta name="description" content="Leading Islamic Education in Quranic Studies. Enroll in Hifz, Nazira, or Maktab.">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --green: #064E3B; --gold: #D4AF37; --white: #F9FAF7; }
+        body { font-family: 'Lato', sans-serif; background: var(--white); margin: 0; }
+        header { background: var(--green); color: var(--gold); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--gold); }
+        .hero { background: linear-gradient(rgba(6,78,59,0.9), rgba(6,78,59,0.9)), url('https://images.unsplash.com/photo-1584281722573-0402928646c2?q=80&w=1500'); background-size: cover; color: white; text-align: center; padding: 80px 20px; }
+        .hero h1 { font-family: 'Cinzel'; font-size: 2.5rem; color: var(--gold); }
+        .container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 5px solid var(--gold); margin-bottom: 30px; }
+        input, select, .btn { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; font-size: 1rem; }
+        .btn { background: var(--green); color: var(--gold); font-weight: bold; cursor: pointer; border: 1px solid var(--gold); }
+        .btn:hover { background: var(--gold); color: var(--green); }
+        nav a { color: white; text-decoration: none; margin-left: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo" id="siteName">MADARSA KANZ UL IMAN</div>
+    <nav><a href="#apply">Apply</a> <a href="#status">Check Status</a></nav>
+</header>
+
+<div class="hero">
+    <h1 id="heroTitle">MADARSA KANZ UL IMAN</h1>
+    <p>Empowering the next generation with Quranic Wisdom</p>
+</div>
+
+<div class="container">
+    <div class="card" id="status">
+        <h3>Student Portal</h3>
+        <p>Enter phone number to check admission status:</p>
+        <input type="tel" id="checkPhone" placeholder="Enter Phone Number">
+        <button class="btn" onclick="checkStatus()">Check My Status</button>
+        <div id="statusResult" style="margin-top:15px; font-weight:bold;"></div>
+    </div>
+
+    <div class="card" id="apply">
+        <h3>Admission Inquiry</h3>
+        <form id="admissionForm">
+            <input type="text" id="parentName" placeholder="Parent/Guardian Name" required>
+            <input type="text" id="studentName" placeholder="Student Full Name" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+            <select id="course">
+                <option value="Hifz">Hifz-ul-Quran</option>
+                <option value="Nazira">Nazira</option>
+                <option value="Maktab">Maktab</option>
+            </select>
+            <button type="submit" class="btn">Submit Inquiry</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDuXBCZgQ_YxAuLJIPYSgI_ZNFWQUqYQ1I",
+  authDomain: "madarsa-kanz-ul-iman.firebaseapp.com",
+  databaseURL: "https://madarsa-kanz-ul-iman-default-rtdb.firebaseio.com",
+  projectId: "madarsa-kanz-ul-iman",
+  storageBucket: "madarsa-kanz-ul-iman.firebasestorage.app",
+  messagingSenderId: "859362012730",
+  appId: "1:859362012730:web:e872fabc81c6fd2dc28f03",
+  measurementId: "G-XB7GXBKF9F"
+};
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Load dynamic site name
+    db.collection("settings").doc("website").onSnapshot(doc => {
+        if(doc.exists) {
+            const name = doc.data().name;
+            document.getElementById('siteName').innerText = name;
+            document.getElementById('heroTitle').innerText = name;
+        }
+    });
+
+    // Form Submit
+    document.getElementById('admissionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            parent: document.getElementById('parentName').value,
+            student: document.getElementById('studentName').value,
+            phone: document.getElementById('phone').value,
+            course: document.getElementById('course').value,
+            status: 'Pending',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        await db.collection("admissions").add(data);
+        alert("Success! Check status using your phone number.");
+        e.target.reset();
+    });
+
+    // Status Check
+    async function checkStatus() {
+        const phone = document.getElementById('checkPhone').value;
+        const q = await db.collection("admissions").where("phone", "==", phone).get();
+        const res = document.getElementById('statusResult');
+        if(q.empty) res.innerHTML = "No record found.";
+        else q.forEach(doc => res.innerHTML = `Student: ${doc.data().student} | Status: ${doc.data().status}`);
+    }
+</script>
+</body>
+</html>
