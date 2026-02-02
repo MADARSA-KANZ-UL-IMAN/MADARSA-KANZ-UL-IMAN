@@ -11,15 +11,15 @@
         body { font-family: 'Lato', sans-serif; background: var(--white); margin: 0; }
         header { background: var(--green); color: var(--gold); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--gold); }
         .hero { background: linear-gradient(rgba(6,78,59,0.9), rgba(6,78,59,0.9)), url('https://images.unsplash.com/photo-1584281722573-0402928646c2?q=80&w=1500'); background-size: cover; color: white; text-align: center; padding: 80px 20px; }
-        .hero h1 { font-family: 'Cinzel'; font-size: 2.5rem; color: var(--gold); }
+        .hero h1 { font-family: 'Cinzel'; font-size: 2.5rem; color: var(--gold); margin: 0; }
         .container { max-width: 800px; margin: 40px auto; padding: 20px; }
         .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 5px solid var(--gold); margin-bottom: 30px; }
-        input, select, .btn { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; font-size: 1rem; }
-        .btn { background: var(--green); color: var(--gold); font-weight: bold; cursor: pointer; border: 1px solid var(--gold); }
+        input, select, .btn { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; font-size: 1rem; box-sizing: border-box; }
+        .btn { background: var(--green); color: var(--gold); font-weight: bold; cursor: pointer; border: 1px solid var(--gold); transition: 0.3s; }
         .btn:hover { background: var(--gold); color: var(--green); }
         nav a { color: white; text-decoration: none; margin-left: 15px; font-weight: bold; }
         
-        /* New Table Styles */
+        /* Table Styles */
         .timing-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .timing-table tr { border-bottom: 1px solid #eee; }
         .timing-table td { padding: 12px 5px; }
@@ -29,7 +29,7 @@
 <body>
 
 <header>
-    <div class="logo" id="siteName"> MADARSA KANZ UL IMAN </div>
+    <div class="logo">MADARSA KANZ UL IMAN</div>
     <nav>
         <a href="#timings">Timings</a>
         <a href="#apply">Apply</a> 
@@ -38,7 +38,7 @@
 </header>
 
 <div class="hero">
-    <h1 id="heroTitle"> MADARSA KANZ UL IMAN </h1>
+    <h1>MADARSA KANZ UL IMAN</h1>
     <p>Empowering the next generation with Quranic Wisdom</p>
 </div>
 
@@ -48,19 +48,19 @@
         <h3>Class Timings</h3>
         <table class="timing-table">
             <tr>
-                <td>Hifz-ul-Quran</td>
+                <td><strong>Hifz-ul-Quran</strong></td>
                 <td>8:00 AM — 8:00 PM</td>
             </tr>
             <tr>
-                <td>Nazira</td>
+                <td><strong>Nazira</strong></td>
                 <td>8:00 AM — 4:00 PM</td>
             </tr>
             <tr>
-                <td>Maktab (Shift 1)</td>
+                <td><strong>Maktab (Shift 1)</strong></td>
                 <td>4:00 PM — 6:00 PM</td>
             </tr>
             <tr>
-                <td>Maktab (Shift 2)</td>
+                <td><strong>Maktab (Shift 2)</strong></td>
                 <td>6:00 PM — 8:00 PM</td>
             </tr>
         </table>
@@ -71,7 +71,7 @@
         <p>Enter phone number to check admission status:</p>
         <input type="tel" id="checkPhone" placeholder="Enter Phone Number">
         <button class="btn" onclick="checkStatus()">Check My Status</button>
-        <div id="statusResult" style="margin-top:15px; font-weight:bold;"></div>
+        <div id="statusResult" style="margin-top:15px; font-weight:bold; color: var(--green);"></div>
     </div>
 
     <div class="card" id="apply">
@@ -93,7 +93,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
 <script>
-    // Note: Use your existing Firebase config here
     const firebaseConfig = {
       apiKey: "AIzaSyDuXBCZgQ_YxAuLJIPYSgI_ZNFWQUqYQ1I",
       authDomain: "madarsa-kanz-ul-iman.firebaseapp.com",
@@ -104,19 +103,20 @@
       appId: "1:859362012730:web:e872fabc81c6fd2dc28f03",
       measurementId: "G-XB7GXBKF9F"
     };
+    
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    db.collection("settings").doc("website").onSnapshot(doc => {
-        if(doc.exists) {
-            const name = doc.data().name;
-            document.getElementById('siteName').innerText = name;
-            document.getElementById('heroTitle').innerText = name;
-        }
-    });
+    /* NOTE: I removed the 'settings' listener that was 
+       overwriting your title with the wrong name.
+    */
 
+    // Form Submit
     document.getElementById('admissionForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.innerText = "Submitting...";
+        
         const data = {
             parent: document.getElementById('parentName').value,
             student: document.getElementById('studentName').value,
@@ -125,17 +125,36 @@
             status: 'Pending',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         };
-        await db.collection("admissions").add(data);
-        alert("Success! Check status using your phone number.");
-        e.target.reset();
+        
+        try {
+            await db.collection("admissions").add(data);
+            alert("Success! Check status using your phone number.");
+            e.target.reset();
+        } catch (error) {
+            alert("Error submitting: " + error.message);
+        } finally {
+            btn.innerText = "Submit Inquiry";
+        }
     });
 
+    // Status Check
     async function checkStatus() {
         const phone = document.getElementById('checkPhone').value;
-        const q = await db.collection("admissions").where("phone", "==", phone).get();
+        if(!phone) return alert("Please enter a phone number");
+        
         const res = document.getElementById('statusResult');
-        if(q.empty) res.innerHTML = "No record found.";
-        else q.forEach(doc => res.innerHTML = `Student: ${doc.data().student} | Status: ${doc.data().status}`);
+        res.innerHTML = "Searching...";
+        
+        const q = await db.collection("admissions").where("phone", "==", phone).get();
+        if(q.empty) {
+            res.innerHTML = "No record found.";
+        } else {
+            let output = "";
+            q.forEach(doc => {
+                output += `Student: ${doc.data().student} | Status: ${doc.data().status}<br>`;
+            });
+            res.innerHTML = output;
+        }
     }
 </script>
 </body>
