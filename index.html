@@ -7,33 +7,48 @@
     <meta name="description" content="Leading Islamic Education in Quranic Studies. Enroll in Hifz, Nazira, or Maktab.">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --green: #064E3B; --gold: #D4AF37; --white: #F9FAF7; }
-        body { font-family: 'Lato', sans-serif; background: var(--white); margin: 0; }
-        header { background: var(--green); color: var(--gold); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--gold); }
+        :root { --green: #064E3B; --gold: #D4AF37; --white: #F9FAF7; --dark: #043629; }
+        body { font-family: 'Lato', sans-serif; background: var(--white); margin: 0; scroll-behavior: smooth; }
+        header { background: var(--green); color: var(--gold); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--gold); position: sticky; top: 0; z-index: 1000; }
         .hero { background: linear-gradient(rgba(6,78,59,0.9), rgba(6,78,59,0.9)), url('https://images.unsplash.com/photo-1584281722573-0402928646c2?q=80&w=1500'); background-size: cover; color: white; text-align: center; padding: 80px 20px; }
         .hero h1 { font-family: 'Cinzel'; font-size: 2.5rem; color: var(--gold); margin: 0; }
         .container { max-width: 800px; margin: 40px auto; padding: 20px; }
         .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 5px solid var(--gold); margin-bottom: 30px; }
         input, select, .btn { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; font-size: 1rem; box-sizing: border-box; }
-        .btn { background: var(--green); color: var(--gold); font-weight: bold; cursor: pointer; border: 1px solid var(--gold); transition: 0.3s; }
+        .btn { background: var(--green); color: var(--gold); font-weight: bold; cursor: pointer; border: 1px solid var(--gold); transition: 0.3s; text-decoration: none; display: inline-block; text-align: center; }
         .btn:hover { background: var(--gold); color: var(--green); }
-        nav a { color: white; text-decoration: none; margin-left: 15px; font-weight: bold; }
+        nav a { color: white; text-decoration: none; margin-left: 15px; font-weight: bold; font-size: 0.9rem; }
+        nav a:hover { color: var(--gold); }
         
         /* Table Styles */
         .timing-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .timing-table tr { border-bottom: 1px solid #eee; }
         .timing-table td { padding: 12px 5px; }
         .timing-table td:last-child { text-align: right; font-weight: bold; color: var(--green); }
+
+        /* Footer & Socials */
+        footer { background: var(--dark); color: white; padding: 40px 5%; text-align: center; border-top: 5px solid var(--gold); }
+        .footer-content { max-width: 800px; margin: 0 auto; }
+        .address-box { margin-bottom: 25px; }
+        .address-box p { font-style: normal; line-height: 1.6; color: #ccc; }
+        .social-links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .social-btn { padding: 10px 20px; border-radius: 5px; text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .fb { background: #1877F2; }
+        .ig { background: #E4405F; }
+        .yt { background: #FF0000; }
+        .social-btn:hover { opacity: 0.8; transform: translateY(-2px); }
+        .maps-link { color: var(--gold); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">MADARSA KANZ UL IMAN</div>
+    <div class="logo" style="font-family: 'Cinzel';">KANZ UL IMAN</div>
     <nav>
         <a href="#timings">Timings</a>
         <a href="#apply">Apply</a> 
-        <a href="#status">Check Status</a>
+        <a href="#status">Status</a>
+        <a href="#contact">Contact</a>
     </nav>
 </header>
 
@@ -90,6 +105,30 @@
     </div>
 </div>
 
+<footer id="contact">
+    <div class="footer-content">
+        <div class="address-box">
+            <h3 style="color: var(--gold); font-family: 'Cinzel';">Visit Us</h3>
+            <p>
+                <strong>Madarsa Kanz-ul-iman</strong><br>
+                Click below to find our location on Google Maps:<br>
+                <a href="https://share.google/yDL4yOlNNgYrzN1jJ" target="_blank" class="maps-link">📍 View Location on Map</a>
+            </p>
+        </div>
+
+        <h3 style="color: var(--gold); font-family: 'Cinzel';">Connect With Us</h3>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1Bo9Vn4k2m/" target="_blank" class="social-btn fb">Facebook</a>
+            <a href="https://www.instagram.com/madarsa_kanzul_imaan?igsh=eHNocXd6endwOXBh" target="_blank" class="social-btn ig">Instagram</a>
+            <a href="https://youtube.com/@madarsa_kanzul_imaan?si=s4SGKtCP0qGib3yJ" target="_blank" class="social-btn yt">YouTube</a>
+        </div>
+        
+        <p style="margin-top: 40px; font-size: 0.8rem; color: #888;">
+            © 2026 Madarsa Kanz Ul Iman. All Rights Reserved.
+        </p>
+    </div>
+</footer>
+
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
 <script>
@@ -106,10 +145,6 @@
     
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
-    /* NOTE: I removed the 'settings' listener that was 
-       overwriting your title with the wrong name.
-    */
 
     // Form Submit
     document.getElementById('admissionForm').addEventListener('submit', async (e) => {
@@ -159,3 +194,4 @@
 </script>
 </body>
 </html>
+        
