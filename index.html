@@ -18,13 +18,23 @@
         .btn { background: var(--green); color: var(--gold); font-weight: bold; cursor: pointer; border: 1px solid var(--gold); }
         .btn:hover { background: var(--gold); color: var(--green); }
         nav a { color: white; text-decoration: none; margin-left: 15px; font-weight: bold; }
+        
+        /* New Table Styles */
+        .timing-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .timing-table tr { border-bottom: 1px solid #eee; }
+        .timing-table td { padding: 12px 5px; }
+        .timing-table td:last-child { text-align: right; font-weight: bold; color: var(--green); }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo" id="siteName">MADARSA KANZ UL IMAN</div>
-    <nav><a href="#apply">Apply</a> <a href="#status">Check Status</a></nav>
+    <nav>
+        <a href="#timings">Timings</a>
+        <a href="#apply">Apply</a> 
+        <a href="#status">Check Status</a>
+    </nav>
 </header>
 
 <div class="hero">
@@ -33,6 +43,29 @@
 </div>
 
 <div class="container">
+    
+    <div class="card" id="timings">
+        <h3>Class Timings</h3>
+        <table class="timing-table">
+            <tr>
+                <td>Hifz-ul-Quran</td>
+                <td>8:00 AM — 8:00 PM</td>
+            </tr>
+            <tr>
+                <td>Nazira</td>
+                <td>8:00 AM — 4:00 PM</td>
+            </tr>
+            <tr>
+                <td>Maktab (Shift 1)</td>
+                <td>4:00 PM — 6:00 PM</td>
+            </tr>
+            <tr>
+                <td>Maktab (Shift 2)</td>
+                <td>6:00 PM — 8:00 PM</td>
+            </tr>
+        </table>
+    </div>
+
     <div class="card" id="status">
         <h3>Student Portal</h3>
         <p>Enter phone number to check admission status:</p>
@@ -60,20 +93,20 @@
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyDuXBCZgQ_YxAuLJIPYSgI_ZNFWQUqYQ1I",
-  authDomain: "madarsa-kanz-ul-iman.firebaseapp.com",
-  databaseURL: "https://madarsa-kanz-ul-iman-default-rtdb.firebaseio.com",
-  projectId: "madarsa-kanz-ul-iman",
-  storageBucket: "madarsa-kanz-ul-iman.firebasestorage.app",
-  messagingSenderId: "859362012730",
-  appId: "1:859362012730:web:e872fabc81c6fd2dc28f03",
-  measurementId: "G-XB7GXBKF9F"
-};
+    // Note: Use your existing Firebase config here
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuXBCZgQ_YxAuLJIPYSgI_ZNFWQUqYQ1I",
+      authDomain: "madarsa-kanz-ul-iman.firebaseapp.com",
+      databaseURL: "https://madarsa-kanz-ul-iman-default-rtdb.firebaseio.com",
+      projectId: "madarsa-kanz-ul-iman",
+      storageBucket: "madarsa-kanz-ul-iman.firebasestorage.app",
+      messagingSenderId: "859362012730",
+      appId: "1:859362012730:web:e872fabc81c6fd2dc28f03",
+      measurementId: "G-XB7GXBKF9F"
+    };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Load dynamic site name
     db.collection("settings").doc("website").onSnapshot(doc => {
         if(doc.exists) {
             const name = doc.data().name;
@@ -82,7 +115,6 @@ const firebaseConfig = {
         }
     });
 
-    // Form Submit
     document.getElementById('admissionForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const data = {
@@ -98,7 +130,6 @@ const firebaseConfig = {
         e.target.reset();
     });
 
-    // Status Check
     async function checkStatus() {
         const phone = document.getElementById('checkPhone').value;
         const q = await db.collection("admissions").where("phone", "==", phone).get();
@@ -109,7 +140,3 @@ const firebaseConfig = {
 </script>
 </body>
 </html>
-
-TIMING HIFZ : 8:00 AM TO 8:00PM NAZIRA :8:00 AM TO 4:00PM MAKTAB :4:00PM TO 6:00PM 
-
-2ND TIMING OF MAKTAB 6:00PM TO 8:00 PM
